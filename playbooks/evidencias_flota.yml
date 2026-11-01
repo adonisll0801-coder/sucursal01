@@ -1,0 +1,42 @@
+---
+- name: Recolectar evidencias de la flota de la Sucursal 01 (solo consulta)
+  hosts: sucursal01
+  gather_facts: false
+
+  vars:
+    lista_router:
+      - { cmd: "show version", archivo: "show-version.txt" }
+      - { cmd: "show ip interface brief", archivo: "ip-interface-brief.txt" }
+      - { cmd: "show running-config", archivo: "running-config.txt" }
+    lista_switch:
+      - { cmd: "show version", archivo: "show-version.txt" }
+      - { cmd: "show vlan brief", archivo: "vlan-brief.txt" }
+      - { cmd: "show interfaces trunk", archivo: "interfaces-trunk.txt" }
+      - { cmd: "show ip interface brief", archivo: "ip-interface-brief.txt" }
+      - { cmd: "show running-config", archivo: "running-config.txt" }
+    lista: "{{ lista_router if 'routers' in group_names else lista_switch }}"
+
+  tasks:
+    - name: Consultar el equipo
+      cisco.ios.ios_command:
+        commands: "{{ lista | map(attribute='cmd') | list }}"
+      register: salida
+      changed_when: false
+
+    - name: Crear carpeta de evidencias del equipo
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../evidencias/ansible/{{ inventory_hostname }}"
+        state: directory
+        mode: "0755"
+      delegate_to: localhost
+
+    - name: Guardar cada salida con los secretos ocultos
+      ansible.builtin.copy:
+        content: '{{ item | regex_replace("(?m)(secret [0-9] ).*", "\\1<OCULTO>") }}'
+        dest: "{{ playbook_dir }}/../evidencias/ansible/{{ inventory_hostname }}/{{ lista[idx].archivo }}"
+        mode: "0644"
+      delegate_to: localhost
+      loop: "{{ salida.stdout }}"
+      loop_control:
+        index_var: idx
+        label: "{{ lista[idx].archivo }}"
