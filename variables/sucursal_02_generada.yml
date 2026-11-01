@@ -1,0 +1,27 @@
+sucursal: SUCURSAL-02
+bloque: 10.20.0.0/23
+vlans:
+- vlan: 10
+  nombre: ADMINISTRACION
+  red: 10.20.0.0/26
+  mascara: 255.255.255.192
+  prefijo: 26
+  gateway: 10.20.0.1
+  hosts_previstos: 50
+  hosts_utilizables: 62
+- vlan: 20
+  nombre: OPERACION
+  red: 10.20.0.64/27
+  mascara: 255.255.255.224
+  prefijo: 27
+  gateway: 10.20.0.65
+  hosts_previstos: 25
+  hosts_utilizables: 30
+- vlan: 99
+  nombre: GESTION
+  red: 10.20.0.96/28
+  mascara: 255.255.255.240
+  prefijo: 28
+  gateway: 10.20.0.97
+  hosts_previstos: 10
+  hosts_utilizables: 14
