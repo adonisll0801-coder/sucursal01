@@ -1,0 +1,16 @@
+---
+- name: Cambio aprobado y no disruptivo - descripcion de un puerto de acceso
+  hosts: SW-SUC-01-CORE
+  gather_facts: false
+
+  vars:
+    puerto: GigabitEthernet0/1
+    descripcion_nueva: "Acceso VLAN 10 PC1 - cambio aprobado"
+
+  tasks:
+    - name: Actualizar la descripcion del puerto
+      cisco.ios.ios_config:
+        parents: "interface {{ puerto }}"
+        lines:
+          - "description {{ descripcion_nueva }}"
+        save_when: modified

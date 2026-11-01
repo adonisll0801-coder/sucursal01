@@ -1,0 +1,18 @@
+Interface                      Status         Protocol Description
+Gi0/0                          up             up       Troncal hacia R-SUC-01
+Gi0/1                          up             up       Acceso VLAN 10 PC1
+Gi0/2                          up             up       Acceso VLAN 10 PC2
+Gi0/3                          up             up       Acceso VLAN 99 PC7
+Gi1/0                          up             up       Acceso VLAN 20 PC3
+Gi1/1                          up             up       Acceso VLAN 20 PC4
+Gi1/2                          up             up       Troncal hacia SW-SUC-01-ACC1
+Gi1/3                          down           down     
+Gi2/0                          down           down     
+Gi2/1                          down           down     
+Gi2/2                          down           down     
+Gi2/3                          down           down     
+Gi3/0                          down           down     
+Gi3/1                          down           down     
+Gi3/2                          down           down     
+Gi3/3                          down           down     
+Vl99                           up             up

@@ -1,0 +1,48 @@
+---
+- name: Capturar el estado de la Sucursal 01 (solo consulta)
+  hosts: sucursal01
+  gather_facts: false
+
+  vars:
+    lista_router:
+      - { cmd: "show ip interface brief", archivo: "ip-interface-brief.txt" }
+      - { cmd: "show ip route", archivo: "ip-route.txt" }
+    lista_switch:
+      - { cmd: "show vlan brief", archivo: "vlan-brief.txt" }
+      - { cmd: "show interfaces trunk", archivo: "interfaces-trunk.txt" }
+      - { cmd: "show ip interface brief", archivo: "ip-interface-brief.txt" }
+      - { cmd: "show interfaces description", archivo: "interfaces-description.txt" }
+      - { cmd: "show running-config | include ip route", archivo: "rutas-config.txt" }
+    lista: "{{ lista_router if 'routers' in group_names else lista_switch }}"
+
+  tasks:
+    - name: Verificar que se indico la fase
+      ansible.builtin.assert:
+        that: (fase | default('')) in ['antes', 'despues']
+        fail_msg: "Use -e fase=antes o -e fase=despues"
+      run_once: true
+      delegate_to: localhost
+
+    - name: Consultar el equipo
+      cisco.ios.ios_command:
+        commands: "{{ lista | map(attribute='cmd') | list }}"
+      register: salida
+      changed_when: false
+
+    - name: Crear carpeta de la fase
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../evidencias/{{ fase }}/{{ inventory_hostname }}"
+        state: directory
+        mode: "0755"
+      delegate_to: localhost
+
+    - name: Guardar cada salida
+      ansible.builtin.copy:
+        content: "{{ item }}\n"
+        dest: "{{ playbook_dir }}/../evidencias/{{ fase }}/{{ inventory_hostname }}/{{ lista[idx].archivo }}"
+        mode: "0644"
+      delegate_to: localhost
+      loop: "{{ salida.stdout }}"
+      loop_control:
+        index_var: idx
+        label: "{{ lista[idx].archivo }}"

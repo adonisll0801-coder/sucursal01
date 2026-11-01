@@ -1,0 +1,14 @@
+equipo,elemento,resultado,evidencia,detalle
+SW-SUC-01-CORE,Cambio solicitado: descripcion de Gi0/1,CAMBIO APLICADO,antes y despues: SW-SUC-01-CORE/interfaces-description.txt,'Acceso VLAN 10 PC1' -> 'Acceso VLAN 10 PC1 - cambio aprobado'
+R-SUC-01,"Gestion: Gi0/2 y Gi0/0.99 (IP, estado)",SIN CAMBIOS,antes y despues: R-SUC-01/ip-interface-brief.txt,
+R-SUC-01,Rutas del router (show ip route),SIN CAMBIOS,antes y despues: R-SUC-01/ip-route.txt,
+SW-SUC-01-CORE,"VLAN (nombre, estado y puertos)",SIN CAMBIOS,antes y despues: SW-SUC-01-CORE/vlan-brief.txt,
+SW-SUC-01-CORE,"Troncales (modo, nativa y VLAN permitidas)",SIN CAMBIOS,antes y despues: SW-SUC-01-CORE/interfaces-trunk.txt,
+SW-SUC-01-CORE,Gestion Vlan99 (IP y estado),SIN CAMBIOS,antes y despues: SW-SUC-01-CORE/ip-interface-brief.txt,
+SW-SUC-01-CORE,Ruta por defecto configurada,SIN CAMBIOS,antes y despues: SW-SUC-01-CORE/rutas-config.txt,
+SW-SUC-01-CORE,Descripciones de los demas puertos,SIN CAMBIOS,antes y despues: SW-SUC-01-CORE/interfaces-description.txt,
+SW-SUC-01-ACC1,"VLAN (nombre, estado y puertos)",SIN CAMBIOS,antes y despues: SW-SUC-01-ACC1/vlan-brief.txt,
+SW-SUC-01-ACC1,"Troncales (modo, nativa y VLAN permitidas)",SIN CAMBIOS,antes y despues: SW-SUC-01-ACC1/interfaces-trunk.txt,
+SW-SUC-01-ACC1,Gestion Vlan99 (IP y estado),SIN CAMBIOS,antes y despues: SW-SUC-01-ACC1/ip-interface-brief.txt,
+SW-SUC-01-ACC1,Ruta por defecto configurada,SIN CAMBIOS,antes y despues: SW-SUC-01-ACC1/rutas-config.txt,
+SW-SUC-01-ACC1,Descripciones de los demas puertos,SIN CAMBIOS,antes y despues: SW-SUC-01-ACC1/interfaces-description.txt,
