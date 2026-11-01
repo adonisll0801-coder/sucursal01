@@ -1,0 +1,13 @@
+{
+  "origen": "Respuesta simulada de una plataforma IPAM / inventario",
+  "sucursal": "SUCURSAL-01",
+  "vlans": [
+    {"id": 10, "nombre": "USUARIOS_VLAN10", "red": "192.168.11.0/24", "gateway": "192.168.10.1"},
+    {"id": 20, "nombre": "USUARIOS_VLAN20", "red": "192.168.20.0/24", "gateway": "192.168.20.254"},
+    {"id": 99, "nombre": "GESTION", "red": "192.168.99.0/24", "gateway": "192.168.99.1"}
+  ],
+  "equipos": [
+    {"nombre": "R-SUC-01", "funcion": "router", "ip_gestion": "192.168.16.2"},
+    {"nombre": "SW-SUC-01-ACC1", "funcion": "switch_acceso", "ip_gestion": "192.168.99.33"}
+  ]
+}

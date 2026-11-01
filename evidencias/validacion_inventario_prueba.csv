@@ -1,0 +1,21 @@
+elemento,atributo,estado,fuentes_comparadas,detalle
+VLAN 10,nombre,COINCIDE,"YAML, IPAM, vlan-brief CORE, vlan-brief ACC1",
+VLAN 10,red,DIFERENCIA,"YAML, IPAM, config router",YAML: 192.168.10.0/24 | IPAM: 192.168.11.0/24 | config router: 192.168.10.0/24
+VLAN 10,gateway,COINCIDE,"YAML, IPAM, config router",
+VLAN 20,nombre,COINCIDE,"YAML, IPAM, vlan-brief CORE, vlan-brief ACC1",
+VLAN 20,red,COINCIDE,"YAML, IPAM, config router",
+VLAN 20,gateway,DIFERENCIA,"YAML, IPAM, config router",YAML: 192.168.20.1 | IPAM: 192.168.20.254 | config router: 192.168.20.1
+VLAN 99,nombre,COINCIDE,"YAML, IPAM, vlan-brief CORE, vlan-brief ACC1",
+VLAN 99,red,COINCIDE,"YAML, IPAM, config router",
+VLAN 99,gateway,COINCIDE,"YAML, IPAM, config router",
+R-SUC-01,nombre,COINCIDE,"IPAM, inventario, YAML, show version",
+R-SUC-01,funcion,COINCIDE,"IPAM, inventario, YAML, show version",
+R-SUC-01,ip de gestion,COINCIDE,"IPAM, inventario, ip interface brief",
+SW-SUC-01-CORE,nombre,FALTANTE,"IPAM, inventario, YAML, show version",sin dato en: IPAM
+SW-SUC-01-CORE,funcion,FALTANTE,"IPAM, inventario, YAML, show version",sin dato en: IPAM
+SW-SUC-01-CORE,ip de gestion,FALTANTE,"IPAM, inventario, YAML, ip interface brief",sin dato en: IPAM
+SW-SUC-01-CORE,gateway de gestion,COINCIDE,"YAML, IPAM gateway VLAN 99, config switch",
+SW-SUC-01-ACC1,nombre,COINCIDE,"IPAM, inventario, YAML, show version",
+SW-SUC-01-ACC1,funcion,COINCIDE,"IPAM, inventario, YAML, show version",
+SW-SUC-01-ACC1,ip de gestion,DIFERENCIA,"IPAM, inventario, YAML, ip interface brief",IPAM: 192.168.99.33 | inventario: 192.168.99.3 | YAML: 192.168.99.3 | ip interface brief: 192.168.99.3
+SW-SUC-01-ACC1,gateway de gestion,COINCIDE,"YAML, IPAM gateway VLAN 99, config switch",
