@@ -1,0 +1,15 @@
+---
+# Reversion del cambio aprobado: devuelve la descripcion original del puerto
+- name: Revertir descripcion de puerto de acceso
+  hosts: SW-SUC-01-CORE
+  gather_facts: false
+  vars:
+    puerto: GigabitEthernet0/1
+    descripcion_original: "Acceso VLAN 10 PC1"
+  tasks:
+    - name: Restaurar la descripcion original
+      cisco.ios.ios_config:
+        parents: "interface {{ puerto }}"
+        lines:
+          - "description {{ descripcion_original }}"
+        save_when: modified
