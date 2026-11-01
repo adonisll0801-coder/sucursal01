@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 .venv/
+inventory/group_vars/sucursal01.yml
+inventory/group_vars/sucursal01.yml
