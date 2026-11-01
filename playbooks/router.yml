@@ -1,0 +1,57 @@
+---
+- name: Configurar router de la Sucursal 01
+  hosts: routers
+  gather_facts: false
+  vars_files:
+    - ../vars/diseno.yml
+
+  tasks:
+    - name: Descripcion de la interfaz troncal
+      cisco.ios.ios_config:
+        parents: "interface {{ router.trunk_interface }}"
+        lines:
+          - "description {{ router.trunk_description }}"
+
+    - name: Subinterfaces por VLAN
+      cisco.ios.ios_config:
+        parents: "interface {{ router.trunk_interface }}.{{ item.vlan }}"
+        lines:
+          - "description {{ item.description }}"
+          - "encapsulation dot1Q {{ item.vlan }}{{ ' native' if item.native | default(false) else '' }}"
+          - "ip address {{ item.ip }} {{ item.mask }}"
+      loop: "{{ router.subinterfaces }}"
+      loop_control:
+        label: "VLAN {{ item.vlan }}"
+
+    - name: Guardar configuracion si hubo cambios
+      cisco.ios.ios_config:
+        save_when: modified
+
+    - name: Obtener respaldo del router
+      cisco.ios.ios_command:
+        commands:
+          - show running-config
+          - show ip interface brief
+      register: salida
+      changed_when: false
+
+    - name: Crear carpeta de respaldo
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}"
+        state: directory
+        mode: "0755"
+      delegate_to: localhost
+
+    - name: Guardar running-config
+      ansible.builtin.copy:
+        content: "{{ salida.stdout[0] }}\n"
+        dest: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}/running-config.txt"
+        mode: "0644"
+      delegate_to: localhost
+
+    - name: Guardar interfaces
+      ansible.builtin.copy:
+        content: "{{ salida.stdout[1] }}\n"
+        dest: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}/interfaces.txt"
+        mode: "0644"
+      delegate_to: localhost

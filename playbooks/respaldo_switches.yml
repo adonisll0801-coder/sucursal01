@@ -1,0 +1,34 @@
+---
+- name: Respaldar switches de la Sucursal 01
+  hosts: switches
+  gather_facts: false
+
+  tasks:
+    - name: Obtener running-config y estado de VLAN
+      cisco.ios.ios_command:
+        commands:
+          - show running-config
+          - show vlan brief
+      register: salida
+      changed_when: false
+
+    - name: Crear carpeta de respaldo del equipo
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}"
+        state: directory
+        mode: "0755"
+      delegate_to: localhost
+
+    - name: Guardar running-config
+      ansible.builtin.copy:
+        content: "{{ salida.stdout[0] }}\n"
+        dest: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}/running-config.txt"
+        mode: "0644"
+      delegate_to: localhost
+
+    - name: Guardar show vlan brief
+      ansible.builtin.copy:
+        content: "{{ salida.stdout[1] }}\n"
+        dest: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}/vlan-brief.txt"
+        mode: "0644"
+      delegate_to: localhost

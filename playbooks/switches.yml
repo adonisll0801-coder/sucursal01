@@ -1,0 +1,56 @@
+---
+- name: Configurar switches de la Sucursal 01
+  hosts: switches
+  gather_facts: false
+  vars_files:
+    - ../vars/diseno.yml
+
+  tasks:
+    - name: Crear VLAN con su nombre
+      cisco.ios.ios_vlans:
+        config:
+          - vlan_id: "{{ item.id }}"
+            name: "{{ item.name }}"
+        state: merged
+      loop: "{{ vlans }}"
+      loop_control:
+        label: "VLAN {{ item.id }}"
+
+    - name: Interfaz de gestion VLAN 99 y ruta por defecto
+      cisco.ios.ios_config:
+        parents: "interface Vlan99"
+        lines:
+          - "ip address {{ switches[inventory_hostname].mgmt_ip }} {{ switches[inventory_hostname].mgmt_mask }}"
+
+    - name: Ruta por defecto de gestion
+      cisco.ios.ios_config:
+        lines:
+          - "ip route 0.0.0.0 0.0.0.0 {{ switches[inventory_hostname].mgmt_gateway }}"
+
+    - name: Configurar enlaces troncales
+      cisco.ios.ios_config:
+        parents: "interface {{ item.interface }}"
+        lines:
+          - "description {{ item.description }}"
+          - "switchport trunk encapsulation dot1q"
+          - "switchport mode trunk"
+          - "switchport trunk native vlan {{ item.native_vlan }}"
+          - "switchport trunk allowed vlan {{ item.allowed_vlans | join(',') }}"
+      loop: "{{ switches[inventory_hostname].trunks }}"
+      loop_control:
+        label: "{{ item.interface }}"
+
+    - name: Configurar puertos de acceso
+      cisco.ios.ios_config:
+        parents: "interface {{ item.interface }}"
+        lines:
+          - "description {{ item.description }}"
+          - "switchport mode access"
+          - "switchport access vlan {{ item.vlan }}"
+      loop: "{{ switches[inventory_hostname].access_ports }}"
+      loop_control:
+        label: "{{ item.interface }}"
+
+    - name: Guardar configuracion si hubo cambios
+      cisco.ios.ios_config:
+        save_when: modified
